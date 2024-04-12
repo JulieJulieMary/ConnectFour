@@ -49,9 +49,8 @@ body.fade-in *{
     width: calc(100%-20px);
     position: relative;
     display: flex;
-    /* flex-direction: column; */
+    flex-direction: initial;
     justify-content: left;
-    align-items: left;
     margin-bottom: 0px;
     padding: 0px;
 }
