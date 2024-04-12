@@ -20,38 +20,51 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-<script src="" async defer></script>
+<body class ="fade-in">
 
-<div class="links">
-    <nav>
+    <div class="links">
+        <nav>
 
-        <a href="homepage.html">Home</a></li>
-        <a href="tryityourself.html">Try it yourself</a></li>
-        <a href="#">About</a></li>
+            <a href="homepage.html">Home</a></li>
+            <a href="tryityourself.html">Try it yourself</a></li>
+            <a href="#">About</a></li>
 
-    </nav>
-</div>
+        </nav>
+    </div>
 
-<div class="homepage">
+    <div class="homepage">
 
-    <section>
-        <div class="title_text">
-            <h1>Start playing!</h1>
-        </div>
-        <div class="subtitle_text">
-            <h1>Click the button below to take a picture of your board and get your results</h1>
-        </div>
-        <div class="image">
+        <section>
+            <div class="title_text">
+                <h1>Start playing!</h1>
+            </div>
+
+            <div class="subtitle_text">
+                <h1>Click the button below to take a picture of your board and get your results</h1>
+            </div>
+
+            <!-- <div class="image">
             <img src="C:\Users\rotar\Downloads\_2ad1a13e-1586-4ab8-b900-3674edf864ec.jpg" alt="Connect Four">
-        </div>
-        <button class="camera_button"> <i class="fas fa-camera"> </i> </button>
-    </section>
+        </div> -->
+            <div class="camera-container">
+                <video id="cameraFeed" autoplay></video>
+                <canvas id="canvas"></canvas>
+                <button id="capture_image_button" onclick="captureImage()">Capture</button>
+            </div>
 
-</div>
+            <button class="camera_button" id="open_camera_button" onclick="openCamera()"> <i class="fas fa-camera"> </i>
+            </button>
 
+            <div id="capturedImageContainer"></div>
 
-<div class="footer">
-    <p>&copy; 2022 Your Company. All rights reserved.</p>
-</div>
+        </section>
+
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2022 Your Company. All rights reserved.</p>
+    </div>
+</body>
+
 
 </html>

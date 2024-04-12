@@ -7,6 +7,20 @@ body {
     padding: 0;
 }
 
+body.fade-in *{
+    opacity: 0;
+    animation: fadeInAnimation 1s ease-in forwards;
+}
+
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .subtitle_text,
 .title_text,
 .try_button,
@@ -42,7 +56,7 @@ body {
     padding: 0px;
 }
 
-.homepage::before {
+body.fade-in::before {
     content: "";
     position: fixed;
     top: 0;
@@ -151,4 +165,34 @@ body {
 
 .fa-camera {
     font-size: 30px;
+}
+
+.camera-container {
+    background-color: salmon;
+    position: absolute;
+    top: 20%;
+    /* transform: translateY(-50%); */
+    right: 200px;
+    height: 400px;
+    width: 530px;
+    border-radius: 25px;
+}
+
+.camera-container canvas {
+    display: none;
+}
+
+.camera-container button {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display:none;
+}
+
+#cameraFeed {
+    max-width: 100%;
+    max-height: 100%;   
+    border-radius: 25px;
 }
