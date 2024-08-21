@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+#venv, dataset
+.venv/
+backend/Connect4-3/
