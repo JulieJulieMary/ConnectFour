@@ -34,5 +34,4 @@
 #venv, dataset
 .venv/
 backend/Connect4-3/
-backend/pieces/hsv/
-backend/pieces/rgb/
+backend/pieces/
