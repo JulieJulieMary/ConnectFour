@@ -35,3 +35,4 @@
 .venv/
 backend/Connect4-3/
 backend/pieces/
+backend/test/
