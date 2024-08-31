@@ -27,7 +27,7 @@ function captureImage() {
 
     var imageData = canvas.toDataURL('image/png'); // Convert canvas to image data URL
 
-    // Display the captured image on the page
+    // Optionally display the captured image on the page (as in your original function)
     var capturedImageContainer = document.getElementById('capturedImageContainer');
     var imgElement = document.createElement('img');
     imgElement.src = imageData;
