@@ -225,6 +225,14 @@ def Connect4Run(path):
 
   model = models.mobilenet_v2(weights=False)
   model.classifier = nn.Sequential(
+    # nn.Dropout(0.3),
+    # nn.Linear(model.classifier[1].in_features, 1280), 
+    # nn.ReLU(),
+    # nn.Linear(1280, 128),
+    # nn.Softmax(),
+    # nn.Linear(128, 3)
+
+
     nn.Dropout(p=0.5),
     nn.Linear(model.classifier[1].in_features, 128),  # Increase dimensionality to match the Conv2d input
     nn.ReLU(),
