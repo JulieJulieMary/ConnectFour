@@ -9,11 +9,7 @@ from torch.utils.data import DataLoader
 from PIL import Image
 import subprocess
 
-
-
-
-
-
+#stretch image so that the border of the playable board fits in a 700x600 rectangle        
 #bfs to find closest edge of the border from the start point
 def Connect4BFS(matrix, start): 
 
@@ -56,18 +52,18 @@ def Connect4GetBoard(image,matrix):
     dr= Connect4BFS(matrix, (639,639)) #right down
     dl= Connect4BFS(matrix, (639,0)) #left down 
 
-    image = cv.imread(image)
+    # image = cv.imread(image) #already given as image from parameter
     result = image.copy()
 
     #margin of error
-    margin = 4
-    ul[0] -= margin
+    margin = -5
+    # ul[0] -= margin
     ul[1] -= margin
-    ur[0] += margin
+    # ur[0] += margin
     ur[1] -= margin
-    dr[0] += margin
+    # dr[0] += margin
     dr[1] += margin
-    dl[0] -= margin
+    # dl[0] -= margin
     dl[1] += margin
 
     #uncomment to see circled where the detected edges are
@@ -170,8 +166,6 @@ def get_state_with_Ml(board,model,transform,device):
             game[row][col] = predicted.item()  # Store the prediction in the game board matrix
     
     state = cv.cvtColor(board, cv.COLOR_BGR2RGB)
-    # plt.imshow(state)
-    # plt.show()
 
     return game
 
@@ -189,13 +183,31 @@ def GetState(board):
     
     
     state = cv.cvtColor(board, cv.COLOR_BGR2RGB)
-    # plt.imshow(state)
 
     return game
 
+def scale_image(path):
+        image = cv.imread(path)
+        height, width, _ = image.shape
+        if height == width:
+            resized_image = cv.resize(image, (640, 640))
+            return resized_image
+        elif height > width:
+            border_size = (height - width) // 2
+            border = cv.copyMakeBorder(image, 0, 0, border_size, border_size, cv.BORDER_CONSTANT, value=[255, 255, 255])
+            resized_border = cv.resize(image, (640, 640))
+            return resized_border
+        else:
+            border_size = (width - height) // 2
+            border = cv.copyMakeBorder(image, border_size, border_size, 0, 0, cv.BORDER_CONSTANT, value=[255, 255, 255])
+            resized_border = cv.resize(image, (640, 640))
+            return resized_border
+        
 
 #run code
-def Connect4Run(image):
+def Connect4Run(path):
+  
+  image = scale_image(path)
   
   yolo_model = YOLO(model="best.pt") #load trained model, must change path
   # results = model('/content/Connect4-3/test/images') #test model and save results
@@ -214,17 +226,17 @@ def Connect4Run(image):
   model = models.mobilenet_v2(weights=False)
   model.classifier = nn.Sequential(
     nn.Dropout(p=0.5),
-    nn.Linear(model.classifier[1].in_features, 1280),  # Increase dimensionality to match the Conv2d input
+    nn.Linear(model.classifier[1].in_features, 128),  # Increase dimensionality to match the Conv2d input
     nn.ReLU(),
-    nn.Unflatten(1, (40, 32, 1)),  # Reshape to match Conv2d input
-    nn.Conv2d(in_channels=40, out_channels=128, kernel_size=3, padding=1),
-    nn.ReLU(),
-    nn.AdaptiveAvgPool2d((1, 1)),  # Pooling to reduce dimensionality
-    nn.Flatten(),
+    # nn.Unflatten(1, (40, 32, 1)),  # Reshape to match Conv2d input
+    # nn.Conv2d(in_channels=40, out_channels=128, kernel_size=3, padding=1),
+    # nn.ReLU(),
+    # nn.AdaptiveAvgPool2d((1, 1)),  # Pooling to reduce dimensionality
+    # nn.Flatten(),
     nn.Linear(128, 3)  # Final classification layer
   )
 
-  model.load_state_dict(torch.load('dropout_ReLU.pth'))
+  model.load_state_dict(torch.load('my_model.pth'))
   model.to(device)  # Move the model to the GPU if available
   model.eval()      # Set the model to evaluation mode
   
@@ -244,19 +256,35 @@ def Connect4Run(image):
   
   return get_state_with_Ml(board, model,transform,device)
 
-
 path = 'image.png'
 
 game = Connect4Run(path)
+
+for i in range(4, -1, -1):
+    for j in range(7):
+        if game[i][j] and not game[i + 1][j]:
+            game[i][j] = 0
 
 print("the detected board")
 
 for line in game:
     print(*line)
 
+
 playerTurn = '2'
 
+with open('game.txt', 'w') as f:
+    f.write(playerTurn)
+    f.write('\n')
+    for line in game:
+        f.write(' '.join(map(str, line))+'\n')
+
 move = subprocess.run(["./MCTS"], capture_output=True, text=True).stdout.strip()
+
+for i in range (5, -1, -1):
+    if not game[i][int(move)]:
+        game[i][int(move)] = 3
+        break
 
 print(f"The best Move for player {playerTurn} is: {move}")
 
