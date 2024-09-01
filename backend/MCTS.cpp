@@ -205,7 +205,7 @@ int main()
 
     int maxi = -1000000, rez = -1;
     for (int i = 0; i < 7; ++i)
-        if (score[i] > maxi)
+        if (score[i] > maxi && !myGame.board[0][i])
             maxi = score[i], rez = i;
 
 
