@@ -287,7 +287,7 @@ with open('game.txt', 'w') as f:
     for line in game:
         f.write(' '.join(map(str, line))+'\n')
 
-move = subprocess.run(["./MCTS"], capture_output=True, text=True).stdout.strip()
+move = subprocess.run(["./MCTS"], capture_output=True, text=True).stdout.strip() #capture the cout from the c++ code
 
 for i in range (5, -1, -1):
     if not game[i][int(move)]:
